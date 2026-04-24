@@ -1,0 +1,88 @@
+import { parseISO, startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isToday, getDay } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { useStore } from "../store";
+import { cn } from "../lib/utils";
+
+export default function CalendarView() {
+  const { tasks, activeModule, openTaskModal } = useStore();
+  const moduleTasks = activeModule === "Agenda" ? tasks : tasks.filter((t) => t.module === activeModule);
+
+  const today = new Date();
+  const monthStart = startOfMonth(today);
+  const monthEnd = endOfMonth(monthStart);
+  const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
+
+  const startDay = getDay(monthStart);
+  const paddingDays = Array.from({ length: startDay }).map((_, i) => `pad-${i}`);
+
+  const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+  return (
+    <div className="flex-1 flex flex-col p-6 overflow-hidden bg-[#0F0F0F]">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold text-[#E0E0E0] capitalize tracking-tight">
+          {format(today, "MMMM yyyy", { locale: ptBR })}
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-7 gap-px bg-[#222222] rounded-lg overflow-hidden border border-[#2A2A2A] flex-1">
+        {weekDays.map((day) => (
+          <div key={day} className="bg-[#1A1A1A] py-2 text-center text-[10px] font-bold text-[#777777] uppercase tracking-widest">
+            {day}
+          </div>
+        ))}
+
+        {paddingDays.map((pad) => (
+          <div key={pad} className="bg-[#111111] min-h-[100px]" />
+        ))}
+
+        {days.map((day) => {
+          const dayStr = format(day, "yyyy-MM-dd");
+          const dayTasks = moduleTasks.filter((t) => t.data === dayStr);
+
+          return (
+            <div
+              key={day.toString()}
+              className={cn(
+                "bg-[#111111] min-h-[100px] p-2 transition-colors hover:bg-[#181818] group",
+                !isSameMonth(day, monthStart) && "opacity-50"
+              )}
+            >
+              <div
+                className={cn(
+                  "w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold mb-2",
+                  isToday(day) ? "bg-violet-600 text-white" : "text-[#777777] group-hover:text-[#E0E0E0]"
+                )}
+              >
+                {format(day, "d")}
+              </div>
+
+              <div className="space-y-1.5 overflow-y-auto max-h-[100px] custom-scrollbar pr-1">
+                {dayTasks.map((task) => {
+                  const borderColors = {
+                    "Comercial": "border-l-blue-500 shadow-[inset_2px_0_0_0_rgba(59,130,246,1)]",
+                    "Produção": "border-l-orange-500 shadow-[inset_2px_0_0_0_rgba(249,115,22,1)]",
+                    "Agenda": "border-l-emerald-500 shadow-[inset_2px_0_0_0_rgba(16,185,129,1)]"
+                  };
+                  return (
+                    <div
+                      key={task.id}
+                      onClick={() => openTaskModal(task)}
+                      className={cn(
+                        "text-[10px] font-medium leading-tight px-2 py-1 bg-[#1A1A1A] text-[#999999] rounded border border-[#2A2A2A] cursor-pointer hover:border-[#444444] hover:text-white truncate",
+                        borderColors[task.module]
+                      )}
+                    >
+                      {task.horario && <span className="text-violet-500 mr-1">{task.horario}</span>}
+                      {task.cliente}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
