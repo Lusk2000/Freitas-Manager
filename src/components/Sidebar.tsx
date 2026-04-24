@@ -60,8 +60,8 @@ export default function Sidebar() {
       <div className="p-4 border-t border-[#222222] flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 shrink-0"></div>
         <div className="text-sm overflow-hidden">
-          <div className="font-medium text-[#E0E0E0] truncate">Lucas Hub</div>
-          <div className="text-xs text-[#555] truncate">Workspace Owner</div>
+          <div className="font-medium text-[#E0E0E0] truncate">Organiza Ai</div>
+          <div className="text-xs text-[#555] truncate">Workspace 2026</div>
         </div>
       </div>
     </aside>

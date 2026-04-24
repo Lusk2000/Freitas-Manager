@@ -111,16 +111,16 @@ export function Modal({ isOpen, onClose, title, children }: { isOpen: boolean; o
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
       <div className="fixed inset-0 bg-[#0A0A0A]/80 backdrop-blur-sm transition-opacity" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-lg transform overflow-hidden rounded-lg bg-[#111] border border-[#222] text-left align-middle shadow-2xl transition-all sm:my-8 sm:w-full">
-        <div className="border-b border-[#222] px-6 py-4 flex items-center justify-between bg-[#1A1A1A]">
+      <div className="relative z-10 w-full max-w-lg transform overflow-hidden rounded-lg bg-[#111] border border-[#222] text-left align-middle shadow-2xl transition-all flex flex-col max-h-[90vh]">
+        <div className="border-b border-[#222] px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between bg-[#1A1A1A] shrink-0">
           <h3 className="text-sm font-bold text-white uppercase tracking-wider">{title}</h3>
-          <button onClick={onClose} className="text-[#555] hover:text-white transition">
+          <button onClick={onClose} className="text-[#555] hover:text-white transition p-1">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
         </div>
-        <div className="px-6 py-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
+        <div className="px-4 py-3 sm:px-6 sm:py-4 overflow-y-auto custom-scrollbar flex-1">
           {children}
         </div>
       </div>

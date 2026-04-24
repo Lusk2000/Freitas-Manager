@@ -26,16 +26,16 @@ export default function KanbanBoard() {
   };
 
   return (
-    <div className="flex-1 flex gap-3 p-6 overflow-x-auto overflow-y-hidden bg-[#0F0F0F]">
+    <div className="flex-1 flex gap-4 md:gap-6 p-4 md:p-6 overflow-x-auto overflow-y-hidden bg-[#0F0F0F] snap-x snap-mandatory md:snap-none custom-scrollbar pb-6">
       {columns.map((columnName) => {
         const colTasks = moduleTasks.filter((t) => t.status === columnName);
 
         return (
-          <div
+      <div
             key={columnName}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, columnName)}
-            className="flex-1 flex flex-col gap-3 min-w-[140px]"
+            className="flex flex-col gap-3 min-w-[280px] w-[85vw] md:w-auto md:min-w-[200px] md:flex-1 shrink-0 snap-center md:snap-align-none"
           >
             <div className="flex items-center justify-between px-2 mb-1">
               <div className="flex items-center gap-2">

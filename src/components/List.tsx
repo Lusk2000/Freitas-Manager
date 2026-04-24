@@ -6,9 +6,9 @@ export default function ListView() {
   const moduleTasks = tasks.filter((t) => t.module === activeModule);
 
   return (
-    <div className="flex-1 p-6 overflow-auto bg-[#0F0F0F]">
-      <div className="border border-[#222222] rounded-lg bg-[#111111] overflow-hidden">
-        <table className="w-full text-left text-sm whitespace-nowrap">
+    <div className="flex-1 p-4 md:p-6 overflow-auto bg-[#0F0F0F]">
+      <div className="border border-[#222222] rounded-lg bg-[#111111] overflow-x-auto custom-scrollbar">
+        <table className="w-full text-left text-sm whitespace-nowrap min-w-[700px]">
           <thead className="bg-[#1A1A1A] text-[#777777] uppercase text-[10px] tracking-widest font-bold">
             <tr>
               <th className="px-6 py-3 border-b border-[#222222]">Job / Cliente</th>
