@@ -1,14 +1,15 @@
-import { parseISO, startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isToday, getDay } from "date-fns";
+import { useState } from "react";
+import { parseISO, startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth, isToday, getDay, addMonths, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useStore } from "../store";
 import { cn } from "../lib/utils";
 
 export default function CalendarView() {
-  const { tasks, activeModule, openTaskModal } = useStore();
-  const moduleTasks = activeModule === "Agenda" ? tasks : tasks.filter((t) => t.module === activeModule);
+  const { tasks, activeModule, openTaskModal, calendarDate, setCalendarDate } = useStore();
+  const moduleTasks = tasks; // Todas as agendas sincronizadas (mostram os mesmos cards)
 
-  const today = new Date();
-  const monthStart = startOfMonth(today);
+  const monthStart = startOfMonth(calendarDate);
   const monthEnd = endOfMonth(monthStart);
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
@@ -17,12 +18,29 @@ export default function CalendarView() {
 
   const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
+  const nextMonth = () => setCalendarDate(addMonths(calendarDate, 1));
+  const prevMonth = () => setCalendarDate(subMonths(calendarDate, 1));
+  const goToToday = () => setCalendarDate(new Date());
+
   return (
     <div className="flex-1 flex flex-col p-4 md:p-6 overflow-hidden bg-[#0F0F0F]">
       <div className="flex items-center justify-between mb-4 shrink-0">
-        <h2 className="text-xl font-bold text-[#E0E0E0] capitalize tracking-tight">
-          {format(today, "MMMM yyyy", { locale: ptBR })}
-        </h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-bold text-[#E0E0E0] capitalize tracking-tight">
+            {format(calendarDate, "MMMM yyyy", { locale: ptBR })}
+          </h2>
+          <div className="flex items-center gap-1 bg-[#181818] border border-[#333333] rounded-md p-0.5">
+            <button onClick={prevMonth} className="p-1 text-[#777] hover:text-[#E0E0E0] transition-colors rounded hover:bg-[#2A2A2A]">
+               <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button onClick={goToToday} className="px-2 text-xs font-bold text-[#777] hover:text-[#E0E0E0] transition-colors">
+               Hoje
+            </button>
+            <button onClick={nextMonth} className="p-1 text-[#777] hover:text-[#E0E0E0] transition-colors rounded hover:bg-[#2A2A2A]">
+               <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar border border-[#2A2A2A] rounded-lg bg-[#222222]">

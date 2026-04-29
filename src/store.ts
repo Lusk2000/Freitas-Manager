@@ -10,12 +10,14 @@ interface AppState {
   activeTaskEdit: Task | null;
   isTaskModalOpen: boolean;
   isLoading: boolean;
+  calendarDate: Date;
 
   setModule: (module: ModuleName) => void;
   setView: (view: ViewType) => void;
   setUser: (user: Role) => void;
   openTaskModal: (task?: Task | null) => void;
   closeTaskModal: () => void;
+  setCalendarDate: (date: Date) => void;
 
   fetchTasks: () => Promise<void>;
   addTask: (task: Omit<Task, "id" | "createdAt">) => Promise<void>;
@@ -32,12 +34,14 @@ export const useStore = create<AppState>((set, get) => ({
   activeTaskEdit: null,
   isTaskModalOpen: false,
   isLoading: true,
+  calendarDate: new Date(),
 
   setModule: (module) => set({ activeModule: module, activeView: module === "Agenda" ? "Calendar" : "Kanban" }),
   setView: (view) => set({ activeView: view }),
   setUser: (user) => set({ activeUser: user }),
   openTaskModal: (task = null) => set({ activeTaskEdit: task, isTaskModalOpen: true }),
   closeTaskModal: () => set({ activeTaskEdit: null, isTaskModalOpen: false }),
+  setCalendarDate: (date) => set({ calendarDate: date }),
 
   fetchTasks: async () => {
     set({ isLoading: true });
